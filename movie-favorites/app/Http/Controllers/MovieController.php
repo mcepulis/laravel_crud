@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Movie;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class MovieController extends Controller
+{
+    public function index()
+    {
+        $movies = Auth::user()->movies()->latest()->get();
+        return view('movies.index', compact('movies'));
+    }
+
+    public function create()
+    {
+        return view('movies.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'year' => 'required|integer|min:1900|max:' . (date('Y') + 5),
+            'director' => 'required|string|max:255',
+            'genre' => 'required|string|max:255',
+        ]);
+
+        Auth::user()->movies()->create($validated);
+
+        return redirect()->route('movies.index')->with('success', 'Movie added successfully!');
+    }
+
+    public function show(Movie $movie)
+    {
+        $this->authorize('view', $movie);
+        return view('movies.show', compact('movie'));
+    }
+
+    public function edit(Movie $movie)
+    {
+        $this->authorize('update', $movie);
+        return view('movies.edit', compact('movie'));
+    }
+
+    public function update(Request $request, Movie $movie)
+    {
+        $this->authorize('update', $movie);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'year' => 'required|integer|min:1900|max:' . (date('Y') + 5),
+            'director' => 'required|string|max:255',
+            'genre' => 'required|string|max:255',
+        ]);
+
+        $movie->update($validated);
+
+        return redirect()->route('movies.index')->with('success', 'Movie updated successfully!');
+    }
+
+    public function destroy(Movie $movie)
+    {
+        $this->authorize('delete', $movie);
+        $movie->delete();
+        return redirect()->route('movies.index')->with('success', 'Movie deleted successfully!');
+    }
+}
