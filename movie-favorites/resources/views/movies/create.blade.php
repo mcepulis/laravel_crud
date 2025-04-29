@@ -1,64 +1,63 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Add New Movie') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Add New Movie</div>
-
-                <div class="card-body">
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST" action="{{ route('movies.store') }}">
                         @csrf
 
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Title</label>
-                            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" required>
-                            @error('title')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        <!-- Title -->
+                        <div class="mb-4">
+                            <x-input-label for="title" :value="__('Title')" />
+                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus />
+                            <x-input-error :messages="$errors->get('title')" class="mt-2" />
                         </div>
 
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description') }}</textarea>
-                            @error('description')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <x-input-label for="description" :value="__('Description')" />
+                            <textarea id="description" name="description" class="block w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('description') }}</textarea>
+                            <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
 
-                        <div class="mb-3">
-                            <label for="year" class="form-label">Year</label>
-                            <input type="number" class="form-control @error('year') is-invalid @enderror" id="year" name="year" value="{{ old('year') }}" required>
-                            @error('year')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        <!-- Year -->
+                        <div class="mb-4">
+                            <x-input-label for="year" :value="__('Year')" />
+                            <x-text-input id="year" class="block mt-1 w-full" type="number" name="year" :value="old('year')" required />
+                            <x-input-error :messages="$errors->get('year')" class="mt-2" />
                         </div>
 
-                        <div class="mb-3">
-                            <label for="director" class="form-label">Director</label>
-                            <input type="text" class="form-control @error('director') is-invalid @enderror" id="director" name="director" value="{{ old('director') }}" required>
-                            @error('director')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        <!-- Director -->
+                        <div class="mb-4">
+                            <x-input-label for="director" :value="__('Director')" />
+                            <x-text-input id="director" class="block mt-1 w-full" type="text" name="director" :value="old('director')" required />
+                            <x-input-error :messages="$errors->get('director')" class="mt-2" />
                         </div>
 
-                        <div class="mb-3">
-                            <label for="genre" class="form-label">Genre</label>
-                            <input type="text" class="form-control @error('genre') is-invalid @enderror" id="genre" name="genre" value="{{ old('genre') }}" required>
-                            @error('genre')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        <!-- Genre -->
+                        <div class="mb-4">
+                            <x-input-label for="genre" :value="__('Genre')" />
+                            <x-text-input id="genre" class="block mt-1 w-full" type="text" name="genre" :value="old('genre')" required />
+                            <x-input-error :messages="$errors->get('genre')" class="mt-2" />
                         </div>
 
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Save Movie</button>
-                            <a href="{{ route('movies.index') }}" class="btn btn-secondary">Cancel</a>
+                        <div class="flex items-center justify-end mt-4">
+                            <a href="{{ route('movies.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 focus:bg-gray-600 active:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                {{ __('Cancel') }}
+                            </a>
+                            <x-primary-button class="ml-4">
+                                {{ __('Save Movie') }}
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@endsection
+</x-app-layout>

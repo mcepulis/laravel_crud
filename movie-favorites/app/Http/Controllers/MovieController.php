@@ -36,19 +36,25 @@ class MovieController extends Controller
 
     public function show(Movie $movie)
     {
-        $this->authorize('view', $movie);
+        if (Auth::user()->cannot('view', $movie)) {
+            abort(403);
+        }
         return view('movies.show', compact('movie'));
     }
 
     public function edit(Movie $movie)
     {
-        $this->authorize('update', $movie);
+        if (Auth::user()->cannot('update', $movie)) {
+            abort(403);
+        }
         return view('movies.edit', compact('movie'));
     }
 
     public function update(Request $request, Movie $movie)
     {
-        $this->authorize('update', $movie);
+        if (Auth::user()->cannot('update', $movie)) {
+            abort(403);
+        }
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -65,7 +71,9 @@ class MovieController extends Controller
 
     public function destroy(Movie $movie)
     {
-        $this->authorize('delete', $movie);
+        if (Auth::user()->cannot('delete', $movie)) {
+            abort(403);
+        }
         $movie->delete();
         return redirect()->route('movies.index')->with('success', 'Movie deleted successfully!');
     }
